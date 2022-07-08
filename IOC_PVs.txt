@@ -1,0 +1,17 @@
+kern:mass
+kern:stability
+pytrinamic:position:actual_position_RBV
+syringepump-01:IRATE:RBV
+syringepump-01:WRATE:RBV
+syringepump-01:IVOLUME:RBV
+syringepump-01:WVOLUME:RBV
+syringepump-01:IRUN
+syringepump-01:WRUN
+omron:setpointRBV
+omron:temperature
+arduino:environment:pressure
+arduino:environment:temperature
+arduino:environment:humidity
+arduino2:environment:pressure
+arduino2:environment:temperature
+arduino2:environment:humidity
