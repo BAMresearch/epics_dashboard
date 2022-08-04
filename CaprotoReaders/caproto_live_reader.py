@@ -5,6 +5,13 @@ import pandas as pd
 from typing import List
 import time
 import threading
+import datetime
+
+def get_time_different_formats():
+    current_time = time.time()
+    current_date_time = datetime.datetime.fromtimestamp(current_time)
+    current_time_human_readable = current_date_time.strftime('%d-%m-%Y %H:%M:%S')
+    return current_time, current_time_human_readable
 
 
 class CALiveReader(threading.Thread):
@@ -39,26 +46,20 @@ class CALiveReader(threading.Thread):
     #             )
 
     def run(self):
-        current_time = time.time()
+        current_time, current_time_human_readable = get_time_different_formats()
         while True:
             # Retrieve values
             values = []
             for pv in self._pvs:
                 values.append(caget(pv))
 
-            values.append(current_time)
+            values.append(current_time_human_readable)
 
             # Add values to dataframe
             assert (
                 len(values) == len(self._pvs) + 1
             ), "Number of retrieved values does not equal the number of PVs to check."
             self.df.loc[len(self.df)] = values
-            # new_row = {}
-            # for pv in self._pvs:
-            #     new_row[pv] = values.pop(0)
-            # new_row["timestamp"] = values.pop()
-            # assert len(values) == 0
-            # self.df = self.df.append(new_row, ignore_index=True)
 
             # Ensure that the maximum number of values to be stored in the dataframe is not exceeded
             num_values_to_remove = self.df.shape[0] - self._max_num_values
@@ -68,7 +69,7 @@ class CALiveReader(threading.Thread):
             while time.time() <= current_time + self._update_time:
                 time.sleep(0.01)
 
-            current_time = time.time()
+            current_time, current_time_human_readable = get_time_different_formats()
 
 
 if __name__ == "__main__":
