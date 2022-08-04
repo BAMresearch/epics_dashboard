@@ -71,6 +71,9 @@ class CALiveReader(threading.Thread):
 
             current_time, current_time_human_readable = get_time_different_formats()
 
+    @property
+    def max_num_values(self):
+        return self._max_num_values
 
 if __name__ == "__main__":
     reader = CALiveReader(1, ["kern:mass", "kern:stability"], 10)
