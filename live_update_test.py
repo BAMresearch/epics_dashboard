@@ -38,21 +38,25 @@ class Selections:
     num_data_points: List[int]
 
 
+title = "EPICS IOC display dashboard"
+st.set_page_config(page_title=f"{title}", page_icon="✅", layout="wide")
+st.title(f"{title}")
+
 data_gen = initialize()
 selections = Selections([], [])
 charts = []
 
-num_plots = st.slider("Number of plots", min_value=1, max_value=10)
+num_plots = st.slider("Select the number of plots you want: ", min_value=1, max_value=10)
 
 for i in range(num_plots):
     with st.container():
         pv_col, data_points_col = st.columns([1, 1])
 
         with pv_col:
-            selections.selected_pvs.append(st.multiselect("Select param", AVAILABLE_PVS, key=i))
+            selections.selected_pvs.append(st.multiselect("Choose the IOC PVs you want to display:", AVAILABLE_PVS, key=i))
         with data_points_col:
             selections.num_data_points.append(
-                st.slider("Number of data points", min_value=10, max_value=data_gen.max_num_values, key=i)
+                st.slider("Select the number of data points to plot: ", min_value=10, max_value=data_gen.max_num_values, key=i)
             )
 
         if TEST_DATA == "dummy":
