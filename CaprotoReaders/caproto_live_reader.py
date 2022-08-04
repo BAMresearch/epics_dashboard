@@ -72,6 +72,7 @@ class CALiveReader(threading.Thread):
 
 
 if __name__ == "__main__":
-    reader = CALiveReader(0.01, ["kern:mass", "kern:stability"], 10)
+    reader = CALiveReader(1, ["kern:mass", "kern:stability"], 10)
     reader.start()
-    print(reader.df)
+    while True:
+        print(reader.df)
