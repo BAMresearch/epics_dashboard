@@ -1,12 +1,5 @@
-from mimetypes import init
 import streamlit as st
-import pandas as pd
-import numpy as np
-import time
-
-from sympy import Idx
 import dummy_data_thread
-import threading
 from CaprotoReaders.caproto_live_reader import CALiveReader
 from typing import List
 
@@ -17,6 +10,10 @@ def get_pvs_from_txt(filename: str) -> List[str]:
     lines = [line.strip() for line in lines]
     return lines
 
+def make_df_ready_to_plot(df, selected_pvs: List[str], num_data_points: int):
+    df = df[["timestamp"] + selected_pvs]
+    df = df.iloc[-num_data_points:]
+    return df.set_index("timestamp")
 
 TEST_DATA = "dummys"
 if TEST_DATA == "dummy":
@@ -51,10 +48,12 @@ for i in range(num_plots):
             num_data_points.append(
                 st.slider("Number of data points", min_value=10, max_value=1000, key=i)
             )
+
         if TEST_DATA == "dummy":
             charts.append(st.line_chart(data_gen.df.iloc[:, selected_pvs[i]]))
         else:
-            charts.append(st.line_chart(data_gen.df[selected_pvs[i]]))
+            data = make_df_ready_to_plot(data_gen.df, selected_pvs[i], num_data_points[i])
+            charts.append(st.line_chart(data))
 
 for i in range(1000000):
     for idx, chart in enumerate(charts):
@@ -62,4 +61,5 @@ for i in range(1000000):
         if TEST_DATA == "dummy":
             chart.line_chart(data_gen.df.iloc[:, selected_pvs[idx]])
         else:
-            chart.line_chart(data_gen.df[selected_pvs[idx]])
+            data = make_df_ready_to_plot(data_gen.df, selected_pvs[idx], num_data_points[idx])
+            chart.line_chart(data)
