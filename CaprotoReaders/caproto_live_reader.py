@@ -7,10 +7,11 @@ import time
 import threading
 import datetime
 
+
 def get_time_different_formats():
     current_time = time.time()
     current_date_time = datetime.datetime.fromtimestamp(current_time)
-    current_time_human_readable = current_date_time.strftime('%d-%m-%Y %H:%M:%S')
+    current_time_human_readable = current_date_time.strftime("%d-%m-%Y %H:%M:%S")
     return current_time, current_time_human_readable
 
 
@@ -64,7 +65,11 @@ class CALiveReader(threading.Thread):
             # Ensure that the maximum number of values to be stored in the dataframe is not exceeded
             num_values_to_remove = self.df.shape[0] - self._max_num_values
             if num_values_to_remove > 0:
-                self.df = self.df.iloc[num_values_to_remove:]
+                self.df = (
+                    self.df.iloc[num_values_to_remove:]
+                    .reset_index()
+                    .drop(columns=["index"])
+                )
 
             while time.time() <= current_time + self._update_time:
                 time.sleep(0.01)
@@ -74,6 +79,7 @@ class CALiveReader(threading.Thread):
     @property
     def max_num_values(self):
         return self._max_num_values
+
 
 if __name__ == "__main__":
     reader = CALiveReader(1, ["kern:mass", "kern:stability"], 10)
