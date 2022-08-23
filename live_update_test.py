@@ -30,7 +30,7 @@ AVAILABLE_PVS = get_pvs_from_txt("IOC_PVs.txt")
 
 @st.experimental_singleton
 def initialize():
-    data_gen = CALiveReader(0.1, AVAILABLE_PVS, 1000)
+    data_gen = CALiveReader(0.1, AVAILABLE_PVS, 10000)
     data_gen.start()
     return data_gen
 
@@ -53,6 +53,16 @@ charts = []
 num_plots = st.slider(
     "Select the number of plots you want: ", min_value=1, max_value=10
 )
+
+update_frequency = st.text_input(
+    "Choose the desired update frequency [Hz] for the dashboard data:", 10
+)
+
+try:
+    data_gen.update_frequency = update_frequency
+except ValueError as e:
+    st.write(e)
+
 
 for i in range(num_plots):
     with st.container():

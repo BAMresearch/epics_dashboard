@@ -35,18 +35,6 @@ class CALiveReader(threading.Thread):
         self.df = pd.DataFrame(columns=self._pvs).astype(float)
         self.df["timestamp"] = ""
 
-    # def add_pvs(self, pvs: List[str]):
-    #     self._pvs.extend(pvs)
-
-    # def remove_pvs(self, pvs: List[str]):
-    #     for pv in pvs:
-    #         try:
-    #             self._pvs.remove(pv)
-    #         except ValueError:
-    #             raise ValueError(
-    #                 f"{pv} could not be removed as it is currently not one of the tracked PVs."
-    #             )
-
     def run(self):
         current_time, current_time_human_readable = get_time_different_formats()
         while True:
@@ -80,13 +68,26 @@ class CALiveReader(threading.Thread):
                 )
 
             while time.time() <= current_time + self._update_time:
-                time.sleep(0.01)
+                time.sleep(1e-5)
 
             current_time, current_time_human_readable = get_time_different_formats()
 
     @property
-    def max_num_values(self):
+    def max_num_values(self) -> int:
         return self._max_num_values
+
+    @property
+    def update_frequency(self) -> float:
+        return 1.0 / self._update_time
+
+    @update_frequency.setter
+    def update_frequency(self, freq: float):
+        """Set the update frequency [Hz] for the data to be stored."""
+        try:
+            freq = float(freq)
+            self._update_time = 1.0 / freq
+        except ValueError:
+            raise ValueError("Invalid update frequency")
 
 
 if __name__ == "__main__":
