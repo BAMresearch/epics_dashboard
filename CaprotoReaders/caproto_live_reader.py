@@ -1,6 +1,5 @@
 from datetime import datetime
 from epics import caget
-from nbformat import read
 import pandas as pd
 from typing import List
 import time
