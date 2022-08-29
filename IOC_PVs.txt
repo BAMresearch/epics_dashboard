@@ -15,3 +15,11 @@ arduino:environment:humidity
 arduino2:environment:pressure
 arduino2:environment:temperature
 arduino2:environment:humidity
+hotplate:temperature:actual_internal
+hotplate:temperature:actual_external
+hotplate:temperature:setpoint
+hotplate:temperature:control
+hotplate:stirrer:actual
+hotplate:stirrer:setpoint
+hotplate:stirrer:control
+hotplate:viscosity
