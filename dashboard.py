@@ -80,7 +80,7 @@ for i in range(num_plots):
                     "Select the number of data points to plot: ",
                     min_value=10,
                     max_value=data_gen.max_num_values,
-                    key=2 * i,
+                    key=2 * i + 100,
                 )
             )
             selections.num_data_points_past.append(
@@ -88,7 +88,7 @@ for i in range(num_plots):
                     "Select the number of data points you want to move the plot into the past: ",
                     min_value=0,
                     max_value=data_gen.max_num_values - 10,
-                    key=2 * i + 1,
+                    key=2 * i + 101,
                 )
             )
 
