@@ -1,5 +1,7 @@
 # EPICS Dashboard
 
+![Dashboard example screenshot](./dashboard_example.png)
+
 ## Installation
 - Download or clone this repository to a directory of your choice.
 - Install the required Python dependencies (given example for global installation, however installing the dependencies in a new virtual environment may be your preferred choice):
